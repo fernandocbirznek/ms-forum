@@ -5,6 +5,7 @@
         public string Descricao { get; set; }
         public long UsuarioId { get; set; }
         public long ForumTopicoRespostaId { get; set; }
+        public long ForumTopicoId { get; set; }
 
         private ForumTopicoResposta _ForumTopicoResposta;
         public virtual ForumTopicoResposta ForumTopicoResposta { get { return _ForumTopicoResposta; } set { _ForumTopicoResposta = value; SetForumTopicoResposta(value); } }

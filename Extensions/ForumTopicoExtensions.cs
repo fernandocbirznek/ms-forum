@@ -13,6 +13,7 @@ namespace ms_forum.Extensions
                 Descricao = request.Descricao,
                 UsuarioId = request.UsuarioId,
                 ForumId = request.ForumId,
+                ForumTopicoEnum = request.ForumTopicoEnum,
                 DataCadastro = DateTime.Now
             };
         }
@@ -25,6 +26,7 @@ namespace ms_forum.Extensions
                 Descricao = request.Descricao,
                 UsuarioId = request.UsuarioId,
                 ForumId = request.ForumId,
+                ForumTopicoEnum = request.ForumTopicoEnum,
                 DataAtualizacao = DateTime.Now
             };
         }

@@ -44,7 +44,7 @@ namespace ms_forum.Features.ForumTagFeature
             return await this.SendAsync(_mediator, new SelecionarForumTagByIdQuery() { Id = forumTagId });
         }
 
-        [HttpGet("selecionar-forum-tags")]
+        [HttpGet("selecionar-forum-tag-sistema")]
         public async Task<ActionResult> Get()
         {
             return await this.SendAsync(_mediator, new SelecionarForumTagFiltersQuery());

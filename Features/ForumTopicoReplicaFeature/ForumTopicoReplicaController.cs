@@ -38,10 +38,10 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature
             return await this.SendAsync(_mediator, new RemoverForumTopicoReplicaCommand() { Id = forumTopicoReplicaId });
         }
 
-        [HttpGet("selecionar-forum-replica-by-forum-topico-resposta-id/{forumTopicoReplicaId}")]
+        [HttpGet("selecionar-forum-topico-replica/{forumTopicoReplicaId}")]
         public async Task<ActionResult> GetForumTopicoReplicaByForumTopicoRespostaId(long forumTopicoReplicaId)
         {
-            return await this.SendAsync(_mediator, new SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQuery() { Id = forumTopicoReplicaId });
+            return await this.SendAsync(_mediator, new SelecionarForumTopicoReplicaByForumTopicoIdFiltersQuery() { Id = forumTopicoReplicaId });
         }
 
         [HttpGet("selecionar-forum/{forumReplicaId}")]

@@ -5,17 +5,12 @@ using ms_forum.Interface;
 
 namespace ms_forum.Features.ForumTopicoReplicaFeature.Commands
 {
-    public class RemoverForumTopicoReplicaCommand : IRequest<RemoverForumTopicoReplicaCommandResponse>
+    public class RemoverForumTopicoReplicaCommand : IRequest<long>
     {
         public long Id { get; set; }
     }
 
-    public class RemoverForumTopicoReplicaCommandResponse
-    {
-        public long Id { get; set; }
-    }
-
-    public class RemoverForumTopicoReplicaCommandHandler : IRequestHandler<RemoverForumTopicoReplicaCommand, RemoverForumTopicoReplicaCommandResponse>
+    public class RemoverForumTopicoReplicaCommandHandler : IRequestHandler<RemoverForumTopicoReplicaCommand, long>
     {
         private readonly IRepository<ForumTopicoReplica> _repository;
 
@@ -27,7 +22,7 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Commands
             _repository = repository;
         }
 
-        public async Task<RemoverForumTopicoReplicaCommandResponse> Handle
+        public async Task<long> Handle
         (
             RemoverForumTopicoReplicaCommand request,
             CancellationToken cancellationToken
@@ -43,10 +38,7 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Commands
             await _repository.RemoveAsync(forumReplica);
             await _repository.SaveChangesAsync(cancellationToken);
 
-            RemoverForumTopicoReplicaCommandResponse response = new RemoverForumTopicoReplicaCommandResponse();
-            response.Id = forumReplica.Id;
-
-            return response;
+            return forumReplica.Id;
         }
 
         private void Validator

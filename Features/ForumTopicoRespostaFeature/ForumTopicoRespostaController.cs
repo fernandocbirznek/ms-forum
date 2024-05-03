@@ -50,10 +50,10 @@ namespace ms_forum.Features.ForumTopicoRespostaFeature
             return await this.SendAsync(_mediator, new SelecionarForumTopicoRespostaFiltersQuery());
         }
 
-        [HttpGet("selecionar-forum-respostas/{topicoId}")]
-        public async Task<ActionResult> GetTopicoRespostas(long topicoId)
+        [HttpGet("selecionar-forum-topico-resposta/{forumTopicoId}")]
+        public async Task<ActionResult> GetTopicoRespostas(long forumTopicoId)
         {
-            return await this.SendAsync(_mediator, new SelecionarForumTopicoRespostaByIdQuery() { Id = topicoId });
+            return await this.SendAsync(_mediator, new SelecionarForumTopicoRespostaByTopicoIdQuery() { Id = forumTopicoId });
         }
     }
 }

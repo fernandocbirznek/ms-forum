@@ -31,11 +31,11 @@ namespace ms_forum.Features.ForumTopicoFeature
             return await this.SendAsync(_mediator, request);
         }
 
-        [HttpDelete("excluir/{ForumtopicoId}")]
+        [HttpDelete("excluir/{forumTopicoId}")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> Delete(long forumId)
+        public async Task<ActionResult> Delete(long forumTopicoId)
         {
-            return await this.SendAsync(_mediator, new RemoverForumTopicoCommand() { Id = forumId });
+            return await this.SendAsync(_mediator, new RemoverForumTopicoCommand() { Id = forumTopicoId });
         }
 
         [HttpGet("selecionar-topico-forum/{ForumtopicoId}")]
@@ -48,6 +48,12 @@ namespace ms_forum.Features.ForumTopicoFeature
         public async Task<ActionResult> Get()
         {
             return await this.SendAsync(_mediator, new SelecionarForumTopicoFiltersQuery());
+        }
+
+        [HttpGet("selecionar-forum-topico/{ForumId}")]
+        public async Task<ActionResult> GetForumTopico(long ForumId)
+        {
+            return await this.SendAsync(_mediator, new SelecionarForumTopicoByForumIdQuery() { Id = ForumId });
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using ms_forum.Domains;
-using ms_forum.Extensions;
 using ms_forum.Helpers;
 using ms_forum.Interface;
 
@@ -41,13 +40,14 @@ namespace ms_forum.Features.ForumTopicoRespostaFeature.Commands
             await Validator(request, cancellationToken);
 
             ForumTopicoResposta forum = await GetFirstAsync(request, cancellationToken);
-            ForumTopicoResposta forumAtualizado = forum.ToUpdate();
+            forum.Descricao = request.Descricao;
+            forum.DataAtualizacao = DateTime.Now;
 
-            await _repositoryForumTopicoResposta.UpdateAsync(forumAtualizado);
+            await _repositoryForumTopicoResposta.UpdateAsync(forum);
             await _repositoryForumTopicoResposta.SaveChangesAsync(cancellationToken);
 
             AtualizarForumTopicoRespostaCommandResponse response = new AtualizarForumTopicoRespostaCommandResponse();
-            response.DataAtualizacao = forumAtualizado.DataAtualizacao;
+            response.DataAtualizacao = forum.DataAtualizacao;
 
             return response;
         }

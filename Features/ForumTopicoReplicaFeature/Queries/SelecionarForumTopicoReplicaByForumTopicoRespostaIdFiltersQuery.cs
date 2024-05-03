@@ -5,12 +5,13 @@ using ms_forum.Interface;
 
 namespace ms_forum.Features.ForumTopicoReplicaFeature.Queries
 {
-    public class SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQuery : IRequest<IEnumerable<SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQueryResponse>>
+    public class SelecionarForumTopicoReplicaByForumTopicoIdFiltersQuery :
+        IRequest<IEnumerable<SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponse>>
     {
         public long Id { get; set; }
     }
 
-    public class SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQueryResponse : Entity
+    public class SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponse : Entity
     {
         public string Descricao { get; set; }
         public long UsuarioId { get; set; }
@@ -18,11 +19,13 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Queries
         public long ForumTopicoRespostaId { get; set; }
     }
 
-    public class SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQueryResponseHandler : IRequestHandler<SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQuery, IEnumerable<SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQueryResponse>>
+    public class SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponseHandler
+        : IRequestHandler<SelecionarForumTopicoReplicaByForumTopicoIdFiltersQuery,
+            IEnumerable<SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponse>>
     {
         private readonly IRepository<ForumTopicoReplica> _repository;
 
-        public SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQueryResponseHandler
+        public SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponseHandler
         (
             IRepository<ForumTopicoReplica> repository
         )
@@ -30,26 +33,26 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Queries
             _repository = repository;
         }
 
-        public async Task<IEnumerable<SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQueryResponse>> Handle
+        public async Task<IEnumerable<SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponse>> Handle
         (
-            SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQuery request,
+            SelecionarForumTopicoReplicaByForumTopicoIdFiltersQuery request,
             CancellationToken cancellationToken
         )
         {
             if (request is null)
-                throw new ArgumentNullException(MessageHelper.NullFor<SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQuery>());
+                throw new ArgumentNullException(MessageHelper.NullFor<SelecionarForumTopicoReplicaByForumTopicoIdFiltersQuery>());
 
             IEnumerable<ForumTopicoReplica> forumRespostaMany = await _repository.GetAsync
                 (
-                    item => item.Id.Equals(request.Id),
+                    item => item.ForumTopicoId.Equals(request.Id),
                     cancellationToken
                 );
 
-            List<SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQueryResponse> responseMany = new List<SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQueryResponse>();
+            List<SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponse> responseMany = new List<SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponse>();
 
             foreach (ForumTopicoReplica forumTopicoResposta in forumRespostaMany)
             {
-                SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQueryResponse response = new SelecionarForumTopicoReplicaByForumTopicoRespostaIdFiltersQueryResponse();
+                SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponse response = new SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponse();
 
                 response.Descricao = forumTopicoResposta.Descricao;
                 response.ForumTopicoRespostaId = forumTopicoResposta.ForumTopicoRespostaId;
@@ -57,6 +60,7 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Queries
                 response.DataCadastro = forumTopicoResposta.DataCadastro;
                 response.DataAtualizacao = forumTopicoResposta.DataAtualizacao;
                 response.Id = forumTopicoResposta.Id;
+                response.ForumTopicoId = forumTopicoResposta.ForumTopicoId;
                 responseMany.Add(response);
             }
 

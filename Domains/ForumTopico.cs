@@ -1,9 +1,12 @@
-﻿namespace ms_forum.Domains
+﻿using ms_forum.Enum;
+
+namespace ms_forum.Domains
 {
     public class ForumTopico : Entity
     {
         public string Titulo { get; set; }
         public string Descricao { get; set; }
+        public ForumTopicoEnum ForumTopicoEnum { get; set; }
         public long UsuarioId { get; set; }
         public virtual ICollection<ForumTopicoTag>? ForumTopicoTags { get; set; }
 

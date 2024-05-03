@@ -41,14 +41,15 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            ForumTopicoReplica forum = await GetFirstAsync(request, cancellationToken);
-            ForumTopicoReplica forumAtualizado = forum.ToUpdate();
+            ForumTopicoReplica forumTopicoReplica = await GetFirstAsync(request, cancellationToken);
+            forumTopicoReplica.Descricao = request.Descricao;
+            forumTopicoReplica.DataAtualizacao = DateTime.Now;
 
-            await _repositoryForumReplica.UpdateAsync(forumAtualizado);
+            await _repositoryForumReplica.UpdateAsync(forumTopicoReplica);
             await _repositoryForumReplica.SaveChangesAsync(cancellationToken);
 
             AtualizarForumTopicoReplicaCommandResponse response = new AtualizarForumTopicoReplicaCommandResponse();
-            response.DataAtualizacao = forumAtualizado.DataAtualizacao;
+            response.DataAtualizacao = forumTopicoReplica.DataAtualizacao;
 
             return response;
         }

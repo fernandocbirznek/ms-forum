@@ -14,7 +14,7 @@ namespace ms_forum.Features.ForumTopicoRespostaFeature.Queries
     {
         public string Descricao { get; set; }
         public long UsuarioId { get; set; }
-        public ForumTopico ForumTopico { get; set; }
+        public long ForumTopicoId { get; set; }
     }
 
     public class SelecionarForumTopicoRespostaByTopicoIdQueryResponseHandler : IRequestHandler<SelecionarForumTopicoRespostaByTopicoIdQuery, IEnumerable<SelecionarForumTopicoRespostaByTopicoIdQueryResponse>>
@@ -40,7 +40,7 @@ namespace ms_forum.Features.ForumTopicoRespostaFeature.Queries
 
             IEnumerable<ForumTopicoResposta> forumRespostaMany = await _repository.GetAsync
                 (
-                    item => item.Id.Equals(request.Id),
+                    item => item.ForumTopicoId.Equals(request.Id),
                     cancellationToken
                 );
 
@@ -55,6 +55,7 @@ namespace ms_forum.Features.ForumTopicoRespostaFeature.Queries
                 response.DataCadastro = forumTopicoResposta.DataCadastro;
                 response.DataAtualizacao = forumTopicoResposta.DataAtualizacao;
                 response.Id = forumTopicoResposta.Id;
+                response.ForumTopicoId = forumTopicoResposta.ForumTopicoId;
                 responseMany.Add(response);
             }
 

@@ -12,6 +12,7 @@ namespace ms_forum.Extensions
                 Descricao = request.Descricao,
                 UsuarioId = request.UsuarioId,
                 ForumTopicoRespostaId = request.ForumTopicoRespostaId,
+                ForumTopicoId = request.ForumTopicoId,
                 DataCadastro = DateTime.Now
             };
         }

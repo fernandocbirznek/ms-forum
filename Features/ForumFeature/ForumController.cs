@@ -44,7 +44,7 @@ namespace ms_forum.Features.ForumFeature
             return await this.SendAsync(_mediator, new SelecionarForumByIdQuery() { Id = forumId });
         }
 
-        [HttpGet("selecionar-foruns")]
+        [HttpGet("selecionar-forum-sistema")]
         public async Task<ActionResult> Get()
         {
             return await this.SendAsync(_mediator, new SelecionarForumFiltersQuery());

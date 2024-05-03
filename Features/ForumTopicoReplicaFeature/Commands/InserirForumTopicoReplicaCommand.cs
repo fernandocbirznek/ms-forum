@@ -11,6 +11,7 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Commands
         public string Descricao { get; set; }
         public long UsuarioId { get; set; }
         public long ForumTopicoRespostaId { get; set; }
+        public long ForumTopicoId { get; set; }
     }
 
     public class InserirForumTopicoReplicaCommandResponse

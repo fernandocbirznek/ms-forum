@@ -5,17 +5,12 @@ using ms_forum.Interface;
 
 namespace ms_forum.Features.ForumTopicoFeature.Commands
 {
-    public class RemoverForumTopicoCommand : IRequest<RemoverForumTopicoCommandResponse>
+    public class RemoverForumTopicoCommand : IRequest<long>
     {
         public long Id { get; set; }
     }
 
-    public class RemoverForumTopicoCommandResponse
-    {
-        public long Id { get; set; }
-    }
-
-    public class RemoverForumTopicoCommandHandler : IRequestHandler<RemoverForumTopicoCommand, RemoverForumTopicoCommandResponse>
+    public class RemoverForumTopicoCommandHandler : IRequestHandler<RemoverForumTopicoCommand, long>
     {
         private readonly IRepository<ForumTopico> _repository;
 
@@ -27,7 +22,7 @@ namespace ms_forum.Features.ForumTopicoFeature.Commands
             _repository = repository;
         }
 
-        public async Task<RemoverForumTopicoCommandResponse> Handle
+        public async Task<long> Handle
         (
             RemoverForumTopicoCommand request,
             CancellationToken cancellationToken
@@ -36,17 +31,14 @@ namespace ms_forum.Features.ForumTopicoFeature.Commands
             if (request is null)
                 throw new ArgumentNullException(MessageHelper.NullFor<RemoverForumTopicoCommand>());
 
-            ForumTopico forum = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            ForumTopico forumTopico = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
 
             await Validator(request, cancellationToken);
 
-            await _repository.RemoveAsync(forum);
+            await _repository.RemoveAsync(forumTopico);
             await _repository.SaveChangesAsync(cancellationToken);
 
-            RemoverForumTopicoCommandResponse response = new RemoverForumTopicoCommandResponse();
-            response.Id = forum.Id;
-
-            return response;
+            return forumTopico.Id;
         }
 
         private async Task Validator
