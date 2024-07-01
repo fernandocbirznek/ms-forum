@@ -15,7 +15,12 @@ namespace ms_forum.Features.ForumFeature.Commands
 
     public class AtualizarForumCommandResponse
     {
+        public long Id { get; set; }
+        public DateTime DataCadasatro { get; set; }
         public DateTime DataAtualizacao { get; set; }
+
+        public string Titulo { get; set; }
+        public string Descricao { get; set; }
     }
 
     public class AtualizarForumHandler : IRequestHandler<AtualizarForumCommand, AtualizarForumCommandResponse>
@@ -45,7 +50,12 @@ namespace ms_forum.Features.ForumFeature.Commands
             await _repositoryForum.SaveChangesAsync(cancellationToken);
 
             AtualizarForumCommandResponse response = new AtualizarForumCommandResponse();
+            response.Id = forum.Id;
+            response.DataCadasatro = forum.DataCadastro;
             response.DataAtualizacao = forum.DataAtualizacao;
+
+            response.Titulo = forum.Titulo;
+            response.Descricao = forum.Descricao;
 
             return response;
         }

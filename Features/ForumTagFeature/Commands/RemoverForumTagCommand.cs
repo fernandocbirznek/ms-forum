@@ -5,17 +5,12 @@ using ms_forum.Interface;
 
 namespace ms_forum.Features.ForumTagFeature.Commands
 {
-    public class RemoverForumTagCommand : IRequest<RemoverForumTagCommandResponse>
+    public class RemoverForumTagCommand : IRequest<long>
     {
         public long Id { get; set; }
     }
 
-    public class RemoverForumTagCommandResponse
-    {
-        public long Id { get; set; }
-    }
-
-    public class RemoverForumTagCommandHandler : IRequestHandler<RemoverForumTagCommand, RemoverForumTagCommandResponse>
+    public class RemoverForumTagCommandHandler : IRequestHandler<RemoverForumTagCommand, long>
     {
         private readonly IRepository<ForumTag> _repository;
 
@@ -27,7 +22,7 @@ namespace ms_forum.Features.ForumTagFeature.Commands
             _repository = repository;
         }
 
-        public async Task<RemoverForumTagCommandResponse> Handle
+        public async Task<long> Handle
         (
             RemoverForumTagCommand request,
             CancellationToken cancellationToken
@@ -38,15 +33,12 @@ namespace ms_forum.Features.ForumTagFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            ForumTag forum = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
+            ForumTag forumTag = await _repository.GetFirstAsync(item => item.Id.Equals(request.Id), cancellationToken);
 
-            await _repository.RemoveAsync(forum);
+            await _repository.RemoveAsync(forumTag);
             await _repository.SaveChangesAsync(cancellationToken);
 
-            RemoverForumTagCommandResponse response = new RemoverForumTagCommandResponse();
-            response.Id = forum.Id;
-
-            return response;
+            return forumTag.Id;
         }
 
         private async Task Validator

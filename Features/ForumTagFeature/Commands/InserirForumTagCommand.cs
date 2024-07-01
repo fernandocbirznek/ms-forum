@@ -16,6 +16,8 @@ namespace ms_forum.Features.ForumTagFeature.Commands
     {
         public long Id { get; set; }
         public DateTime DataCadastro { get; set; }
+
+        public string Titulo { get; set; }
     }
 
     public class InserirForumTagHandler : IRequestHandler<InserirForumTagCommand, InserirForumTagCommandResponse>
@@ -49,6 +51,8 @@ namespace ms_forum.Features.ForumTagFeature.Commands
             InserirForumTagCommandResponse response = new InserirForumTagCommandResponse();
             response.DataCadastro = forum.DataCadastro;
             response.Id = forum.Id;
+
+            response.Titulo = forum.Titulo;
 
             return response;
         }

@@ -16,6 +16,9 @@ namespace ms_forum.Features.ForumFeature.Commands
     {
         public long Id { get; set; }
         public DateTime DataCadastro { get; set; }
+
+        public string Titulo { get; set; }
+        public string Descricao { get; set; }
     }
 
     public class InserirForumHandler : IRequestHandler<InserirForumCommand, InserirForumCommandResponse>
@@ -49,6 +52,9 @@ namespace ms_forum.Features.ForumFeature.Commands
             InserirForumCommandResponse response = new InserirForumCommandResponse();
             response.DataCadastro = forum.DataCadastro;
             response.Id = forum.Id;
+
+            response.Titulo = forum.Titulo;
+            response.Descricao = forum.Descricao;
 
             return response;
         }

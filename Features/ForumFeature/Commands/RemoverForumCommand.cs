@@ -5,17 +5,12 @@ using ms_forum.Interface;
 
 namespace ms_forum.Features.ForumFeature.Commands
 {
-    public class RemoverForumCommand : IRequest<RemoverForumCommandResponse>
+    public class RemoverForumCommand : IRequest<long>
     {
         public long Id { get; set; }
     }
 
-    public class RemoverForumCommandResponse
-    {
-        public long Id { get; set; }
-    }
-
-    public class RemoverForumCommandHandler : IRequestHandler<RemoverForumCommand, RemoverForumCommandResponse>
+    public class RemoverForumCommandHandler : IRequestHandler<RemoverForumCommand, long>
     {
         private readonly IRepository<Forum> _repository;
 
@@ -27,7 +22,7 @@ namespace ms_forum.Features.ForumFeature.Commands
             _repository = repository;
         }
 
-        public async Task<RemoverForumCommandResponse> Handle
+        public async Task<long> Handle
         (
             RemoverForumCommand request,
             CancellationToken cancellationToken
@@ -43,10 +38,7 @@ namespace ms_forum.Features.ForumFeature.Commands
             await _repository.RemoveAsync(forum);
             await _repository.SaveChangesAsync(cancellationToken);
 
-            RemoverForumCommandResponse response = new RemoverForumCommandResponse();
-            response.Id = forum.Id;
-
-            return response;
+            return forum.Id;
         }
 
         private async Task Validator
