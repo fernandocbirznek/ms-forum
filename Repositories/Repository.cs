@@ -89,6 +89,22 @@ namespace ms_forum.Repositories
                 .ConfigureAwait(false);
         }
 
+        public virtual async Task<long> CountAsync
+        (
+            CancellationToken cancellationToken
+        //Expression<Func<T, bool>>? predicate = null
+        )
+        {
+            //if (predicate != null)
+            //{
+            //    return await _context.Set<T>().CountAsync(predicate, cancellationToken);
+            //}
+            //else
+            //{
+            return await _context.Set<T>().CountAsync(cancellationToken);
+            //}
+        }
+
         public DbConnection Connection => _context.Connection;
     }
 }

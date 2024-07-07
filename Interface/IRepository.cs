@@ -17,6 +17,7 @@ namespace ms_forum.Interface
         Task UpdateCollectionAsync(IEnumerable<T> entities);
         Task RemoveAsync(T entity);
         Task SaveChangesAsync(CancellationToken cancellationToken);
+        Task<long> CountAsync(CancellationToken cancellationToken);
         DbConnection Connection { get; }
     }
 }
