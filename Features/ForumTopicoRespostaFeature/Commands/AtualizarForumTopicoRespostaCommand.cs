@@ -13,7 +13,13 @@ namespace ms_forum.Features.ForumTopicoRespostaFeature.Commands
 
     public class AtualizarForumTopicoRespostaCommandResponse
     {
+        public long Id { get; set; }
+        public DateTime DataCadastro { get; set; }
         public DateTime DataAtualizacao { get; set; }
+
+        public string Descricao { get; set; }
+        public long UsuarioId { get; set; }
+        public long ForumTopicoId { get; set; }
     }
 
     public class AtualizarForumTopicoRespostaHandler : IRequestHandler<AtualizarForumTopicoRespostaCommand, AtualizarForumTopicoRespostaCommandResponse>
@@ -39,15 +45,21 @@ namespace ms_forum.Features.ForumTopicoRespostaFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            ForumTopicoResposta forum = await GetFirstAsync(request, cancellationToken);
-            forum.Descricao = request.Descricao;
-            forum.DataAtualizacao = DateTime.Now;
+            ForumTopicoResposta forumTopicoResposta = await GetFirstAsync(request, cancellationToken);
+            forumTopicoResposta.Descricao = request.Descricao;
+            forumTopicoResposta.DataAtualizacao = DateTime.Now;
 
-            await _repositoryForumTopicoResposta.UpdateAsync(forum);
+            await _repositoryForumTopicoResposta.UpdateAsync(forumTopicoResposta);
             await _repositoryForumTopicoResposta.SaveChangesAsync(cancellationToken);
 
             AtualizarForumTopicoRespostaCommandResponse response = new AtualizarForumTopicoRespostaCommandResponse();
-            response.DataAtualizacao = forum.DataAtualizacao;
+            response.DataAtualizacao = forumTopicoResposta.DataAtualizacao;
+            response.Id = forumTopicoResposta.Id;
+            response.DataCadastro = forumTopicoResposta.DataCadastro;
+
+            response.Descricao = forumTopicoResposta.Descricao;
+            response.ForumTopicoId = forumTopicoResposta.ForumTopicoId;
+            response.UsuarioId = forumTopicoResposta.UsuarioId;
 
             return response;
         }

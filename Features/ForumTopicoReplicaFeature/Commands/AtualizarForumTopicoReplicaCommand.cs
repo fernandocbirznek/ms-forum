@@ -15,7 +15,16 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Commands
 
     public class AtualizarForumTopicoReplicaCommandResponse
     {
+        public long Id { get; set; }
+        public DateTime DataCadastro { get; set; }
         public DateTime DataAtualizacao { get; set; }
+
+        public string Descricao { get; set; }
+        public long UsuarioId { get; set; }
+        public long ForumTopicoRespostaId { get; set; }
+        public long ForumTopicoId { get; set; }
+
+
     }
 
     public class AtualizarForumTopicoReplicaHandler : IRequestHandler<AtualizarForumTopicoReplicaCommand, AtualizarForumTopicoReplicaCommandResponse>
@@ -50,6 +59,13 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Commands
 
             AtualizarForumTopicoReplicaCommandResponse response = new AtualizarForumTopicoReplicaCommandResponse();
             response.DataAtualizacao = forumTopicoReplica.DataAtualizacao;
+            response.DataCadastro = forumTopicoReplica.DataCadastro;
+            response.Id = forumTopicoReplica.Id;
+
+            response.Descricao = forumTopicoReplica.Descricao;
+            response.ForumTopicoRespostaId = forumTopicoReplica.ForumTopicoRespostaId;
+            response.ForumTopicoId = forumTopicoReplica.ForumTopicoId;
+            response.UsuarioId = forumTopicoReplica.UsuarioId;
 
             return response;
         }

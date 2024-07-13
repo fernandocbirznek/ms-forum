@@ -15,7 +15,7 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
         public string Titulo { get; set; }
         public string Descricao { get; set; }
         public long UsuarioId { get; set; }
-        public IEnumerable<ForumTag> Tags { get; set; }
+        public IEnumerable<ForumTag> ForumTagMany { get; set; }
         public long ForumId { get; set; }
     }
 

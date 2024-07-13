@@ -18,6 +18,11 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Commands
     {
         public long Id { get; set; }
         public DateTime DataCadastro { get; set; }
+
+        public string Descricao { get; set; }
+        public long UsuarioId { get; set; }
+        public long ForumTopicoRespostaId { get; set; }
+        public long ForumTopicoId { get; set; }
     }
 
     public class InserirForumTopicoReplicaHandler : IRequestHandler<InserirForumTopicoReplicaCommand, InserirForumTopicoReplicaCommandResponse>
@@ -46,14 +51,19 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            ForumTopicoReplica forum = request.ToDomain();
+            ForumTopicoReplica forumTopicoReplica = request.ToDomain();
 
-            await _repositoryForumTopicoReplica.AddAsync(forum, cancellationToken);
+            await _repositoryForumTopicoReplica.AddAsync(forumTopicoReplica, cancellationToken);
             await _repositoryForumTopicoReplica.SaveChangesAsync(cancellationToken);
 
             InserirForumTopicoReplicaCommandResponse response = new InserirForumTopicoReplicaCommandResponse();
-            response.DataCadastro = forum.DataCadastro;
-            response.Id = forum.Id;
+            response.DataCadastro = forumTopicoReplica.DataCadastro;
+            response.Id = forumTopicoReplica.Id;
+
+            response.Descricao = forumTopicoReplica.Descricao;
+            response.ForumTopicoRespostaId = forumTopicoReplica.ForumTopicoRespostaId;
+            response.ForumTopicoId = forumTopicoReplica.ForumTopicoId;
+            response.UsuarioId = forumTopicoReplica.UsuarioId;
 
             return response;
         }

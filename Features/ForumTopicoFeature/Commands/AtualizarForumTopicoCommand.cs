@@ -21,6 +21,15 @@ namespace ms_forum.Features.ForumTopicoFeature.Commands
     public class AtualizarForumTopicoCommandResponse
     {
         public DateTime DataAtualizacao { get; set; }
+        public long Id { get; set; }
+        public DateTime DataCadastro { get; set; }
+
+        public string Titulo { get; set; }
+        public string Descricao { get; set; }
+        public long UsuarioId { get; set; }
+        public long ForumId { get; set; }
+        public ForumTopicoEnum ForumTopicoEnum { get; set; }
+        public IEnumerable<ForumTag> ForumTagMany { get; set; }
     }
 
     public class AtualizarForumTopicoHandler : IRequestHandler<AtualizarForumTopicoCommand, AtualizarForumTopicoCommandResponse>
@@ -48,13 +57,13 @@ namespace ms_forum.Features.ForumTopicoFeature.Commands
 
             await Validator(request, cancellationToken);
 
-            ForumTopico forum = await GetFirstAsync(request, cancellationToken);
-            forum.Titulo = request.Titulo;
-            forum.Descricao = request.Descricao;
-            forum.ForumTopicoEnum = request.ForumTopicoEnum;
-            forum.DataAtualizacao = DateTime.Now;
+            ForumTopico forumTopico = await GetFirstAsync(request, cancellationToken);
+            forumTopico.Titulo = request.Titulo;
+            forumTopico.Descricao = request.Descricao;
+            forumTopico.ForumTopicoEnum = request.ForumTopicoEnum;
+            forumTopico.DataAtualizacao = DateTime.Now;
 
-            await _repositoryForumTopico.UpdateAsync(forum);
+            await _repositoryForumTopico.UpdateAsync(forumTopico);
             await _repositoryForumTopico.SaveChangesAsync(cancellationToken);
 
             IEnumerable<ForumTopicoTag> forumTopicoMany = await GetForumTopicoTagAsync(request, cancellationToken);
@@ -82,7 +91,16 @@ namespace ms_forum.Features.ForumTopicoFeature.Commands
             }
 
             AtualizarForumTopicoCommandResponse response = new AtualizarForumTopicoCommandResponse();
-            response.DataAtualizacao = forum.DataAtualizacao;
+            response.DataAtualizacao = forumTopico.DataAtualizacao;
+            response.DataCadastro = forumTopico.DataCadastro;
+            response.Id = forumTopico.Id;
+
+            response.Titulo = forumTopico.Titulo;
+            response.ForumId = forumTopico.ForumId;
+            response.UsuarioId = forumTopico.UsuarioId;
+            response.ForumTagMany = request.ForumTagMany;
+            response.Descricao = request.Descricao;
+            response.ForumTopicoEnum = request.ForumTopicoEnum;
 
             return response;
         }

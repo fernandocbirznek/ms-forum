@@ -19,21 +19,25 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
         public ForumTopicoEnum ForumTopicoEnum { get; set; }
         public IEnumerable<ForumTag> ForumTagMany { get; set; }
         public long ForumId { get; set; }
+        public long Resposta {  get; set; }
     }
 
     public class SelecionarForumTopicoByForumIdQueryHandler : 
         IRequestHandler<SelecionarForumTopicoByForumIdQuery, IEnumerable<SelecionarForumTopicoByForumIdQueryResponse>>
     {
         private readonly IRepository<ForumTopico> _repository;
+        private readonly IRepository<ForumTopicoResposta> _repositoryForumTopicoResposta;
         private readonly IRepository<ForumTag> _repositoryForumTag;
 
         public SelecionarForumTopicoByForumIdQueryHandler
         (
             IRepository<ForumTopico> repository,
+            IRepository<ForumTopicoResposta> repositoryForumTopicoResposta,
             IRepository<ForumTag> repositoryForumTag
         )
         {
             _repository = repository;
+            _repositoryForumTopicoResposta = repositoryForumTopicoResposta;
             _repositoryForumTag = repositoryForumTag;
         }
 
@@ -61,6 +65,8 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
                     if (forumTag is not null)
                         forumTopicoTagMany.Add(forumTag);
                 }
+
+                var forumTopicoRespostaMany = await GetForumTopicoRespostaCountAsync(forumTopico.Id, cancellationToken);
 
                 SelecionarForumTopicoByForumIdQueryResponse response = new SelecionarForumTopicoByForumIdQueryResponse();
                 response.Titulo = forumTopico.Titulo;
@@ -99,6 +105,19 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
         {
             return await _repositoryForumTag.GetAsync
                 (
+                    cancellationToken
+                );
+        }
+
+        private async Task<IEnumerable<ForumTopicoResposta>> GetForumTopicoRespostaCountAsync
+        (
+            long request,
+            CancellationToken cancellationToken
+        )
+        {
+            return await _repositoryForumTopicoResposta.GetAsync
+                (
+                    item => item.ForumTopicoId.Equals(request),
                     cancellationToken
                 );
         }

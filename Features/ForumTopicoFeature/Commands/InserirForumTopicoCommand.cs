@@ -21,6 +21,13 @@ namespace ms_forum.Features.ForumTopicoFeature.Commands
     {
         public long Id { get; set; }
         public DateTime DataCadastro { get; set; }
+
+        public string Titulo { get; set; }
+        public string Descricao { get; set; }
+        public long UsuarioId { get; set; }
+        public long ForumId { get; set; }
+        public ForumTopicoEnum ForumTopicoEnum { get; set; }
+        public IEnumerable<ForumTag> ForumTagMany { get; set; }
     }
 
     public class InserirForumTopicoHandler : IRequestHandler<InserirForumTopicoCommand, InserirForumTopicoCommandResponse>
@@ -74,6 +81,13 @@ namespace ms_forum.Features.ForumTopicoFeature.Commands
             InserirForumTopicoCommandResponse response = new InserirForumTopicoCommandResponse();
             response.DataCadastro = forumTopico.DataCadastro;
             response.Id = forumTopico.Id;
+
+            response.Titulo = forumTopico.Titulo;
+            response.ForumId = forumTopico.ForumId;
+            response.UsuarioId = forumTopico.UsuarioId;
+            response.ForumTagMany = request.ForumTagMany;
+            response.Descricao = request.Descricao;
+            response.ForumTopicoEnum = request.ForumTopicoEnum;
 
             return response;
         }
