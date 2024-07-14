@@ -17,18 +17,24 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
         public long UsuarioId { get; set; }
         public IEnumerable<ForumTag> ForumTagMany { get; set; }
         public long ForumId { get; set; }
+
+        public string UsuarioNome { get; set; }
+        public byte[]? UsuarioFoto { get; set; }
     }
 
     public class SelecionarForumTopicoByIdQueryHandler : IRequestHandler<SelecionarForumTopicoByIdQuery, SelecionarForumTopicoByIdQueryResponse>
     {
         private readonly IRepository<ForumTopico> _repository;
+        private readonly IUsuarioService _usuarioService;
 
         public SelecionarForumTopicoByIdQueryHandler
         (
-            IRepository<ForumTopico> repository
+            IRepository<ForumTopico> repository,
+            IUsuarioService usuarioService
         )
         {
             _repository = repository;
+            _usuarioService = usuarioService;
         }
 
         public async Task<SelecionarForumTopicoByIdQueryResponse> Handle
@@ -44,6 +50,12 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
 
             Validator(forumTopico);
 
+            var usuario = await _usuarioService.GetUsuarioByIdAsync(forumTopico.UsuarioId);
+            if (usuario is null)
+            {
+                usuario = new Service.UsuarioService.UsuarioResponse();
+            }
+
             SelecionarForumTopicoByIdQueryResponse response = new SelecionarForumTopicoByIdQueryResponse();
 
             response.Titulo = forumTopico.Titulo;
@@ -53,6 +65,9 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
             response.DataCadastro = forumTopico.DataCadastro;
             response.DataAtualizacao = forumTopico.DataAtualizacao;
             response.Id = forumTopico.Id;
+
+            response.UsuarioNome = usuario.Nome;
+            response.UsuarioFoto = usuario.Foto;
 
             return response;
         }

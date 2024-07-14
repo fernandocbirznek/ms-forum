@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using ms_forum;
 using ms_forum.Domains;
 using ms_forum.Extensions;
+using ms_forum.Interface;
+using ms_forum.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,12 @@ builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(ForumTo
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(ForumTopicoResposta).Assembly));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(ForumTopicoReplica).Assembly));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(ForumTopicoTag).Assembly));
+
+// Acessar outro MS
+builder.Services.AddHttpClient<IUsuarioService, UsuarioService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("Services:UsuarioService"));
+});
 
 var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

@@ -20,6 +20,9 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
         public IEnumerable<ForumTag> ForumTagMany { get; set; }
         public long ForumId { get; set; }
         public long Resposta {  get; set; }
+
+        public string UsuarioNome { get; set; }
+        public byte[]? UsuarioFoto { get; set; }
     }
 
     public class SelecionarForumTopicoByForumIdQueryHandler : 
@@ -29,16 +32,22 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
         private readonly IRepository<ForumTopicoResposta> _repositoryForumTopicoResposta;
         private readonly IRepository<ForumTag> _repositoryForumTag;
 
+        private readonly IUsuarioService _usuarioService;
+
         public SelecionarForumTopicoByForumIdQueryHandler
         (
             IRepository<ForumTopico> repository,
             IRepository<ForumTopicoResposta> repositoryForumTopicoResposta,
-            IRepository<ForumTag> repositoryForumTag
+            IRepository<ForumTag> repositoryForumTag,
+
+            IUsuarioService usuarioService
         )
         {
             _repository = repository;
             _repositoryForumTopicoResposta = repositoryForumTopicoResposta;
             _repositoryForumTag = repositoryForumTag;
+
+            _usuarioService = usuarioService;
         }
 
         public async Task<IEnumerable<SelecionarForumTopicoByForumIdQueryResponse>> Handle
@@ -68,6 +77,12 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
 
                 var forumTopicoRespostaMany = await GetForumTopicoRespostaCountAsync(forumTopico.Id, cancellationToken);
 
+                var usuario = await _usuarioService.GetUsuarioByIdAsync(forumTopico.UsuarioId);
+                if (usuario is null)
+                {
+                    usuario = new Service.UsuarioService.UsuarioResponse();
+                }
+
                 SelecionarForumTopicoByForumIdQueryResponse response = new SelecionarForumTopicoByForumIdQueryResponse();
                 response.Titulo = forumTopico.Titulo;
                 response.Descricao = forumTopico.Descricao;
@@ -78,6 +93,10 @@ namespace ms_forum.Features.ForumTopicoFeature.Queries
                 response.DataCadastro = forumTopico.DataCadastro;
                 response.DataAtualizacao = forumTopico.DataAtualizacao;
                 response.Id = forumTopico.Id;
+
+                response.UsuarioNome = usuario.Nome;
+                response.UsuarioFoto = usuario.Foto;
+
                 responseMany.Add(response);
             }
 
