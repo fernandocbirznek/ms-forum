@@ -17,6 +17,9 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Queries
         public long UsuarioId { get; set; }
         public long ForumTopicoId { get; set; }
         public long ForumTopicoRespostaId { get; set; }
+
+        public string UsuarioNome { get; set; }
+        public byte[]? UsuarioFoto { get; set; }
     }
 
     public class SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponseHandler
@@ -24,13 +27,16 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Queries
             IEnumerable<SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponse>>
     {
         private readonly IRepository<ForumTopicoReplica> _repository;
+        private readonly IUsuarioService _usuarioService;
 
         public SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponseHandler
         (
-            IRepository<ForumTopicoReplica> repository
+            IRepository<ForumTopicoReplica> repository,
+            IUsuarioService usuarioService
         )
         {
             _repository = repository;
+            _usuarioService = usuarioService;
         }
 
         public async Task<IEnumerable<SelecionarForumTopicoReplicaByForumTopicoIdFiltersQueryResponse>> Handle
@@ -61,6 +67,16 @@ namespace ms_forum.Features.ForumTopicoReplicaFeature.Queries
                 response.DataAtualizacao = forumTopicoResposta.DataAtualizacao;
                 response.Id = forumTopicoResposta.Id;
                 response.ForumTopicoId = forumTopicoResposta.ForumTopicoId;
+
+                var usuario = await _usuarioService.GetUsuarioByIdAsync(forumTopicoResposta.UsuarioId);
+                if (usuario is null)
+                {
+                    usuario = new Service.UsuarioService.UsuarioResponse();
+                }
+
+                response.UsuarioNome = usuario.Nome;
+                response.UsuarioFoto = usuario.Foto;
+
                 responseMany.Add(response);
             }
 

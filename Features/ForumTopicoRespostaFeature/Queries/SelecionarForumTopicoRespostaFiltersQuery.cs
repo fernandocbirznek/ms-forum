@@ -13,18 +13,24 @@ namespace ms_forum.Features.ForumTopicoRespostaFeature.Queries
     {
         public string Descricao { get; set; }
         public long UsuarioId { get; set; }
+
+        public string UsuarioNome { get; set; }
+        public byte[]? UsuarioFoto { get; set; }
     }
 
     public class SelecionarForumRespostaFiltersQueryResponseHandler : IRequestHandler<SelecionarForumTopicoRespostaFiltersQuery, IEnumerable<SelecionarForumTopicoRespostaFiltersQueryResponse>>
     {
         private readonly IRepository<ForumTopicoResposta> _repository;
+        private readonly IUsuarioService _usuarioService;
 
         public SelecionarForumRespostaFiltersQueryResponseHandler
         (
-            IRepository<ForumTopicoResposta> repository
+            IRepository<ForumTopicoResposta> repository,
+            IUsuarioService usuarioService
         )
         {
             _repository = repository;
+            _usuarioService = usuarioService;
         }
 
         public async Task<IEnumerable<SelecionarForumTopicoRespostaFiltersQueryResponse>> Handle
@@ -49,6 +55,16 @@ namespace ms_forum.Features.ForumTopicoRespostaFeature.Queries
                 response.DataCadastro = forumTopicoResposta.DataCadastro;
                 response.DataAtualizacao = forumTopicoResposta.DataAtualizacao;
                 response.Id = forumTopicoResposta.Id;
+
+                var usuario = await _usuarioService.GetUsuarioByIdAsync(forumTopicoResposta.UsuarioId);
+                if (usuario is null)
+                {
+                    usuario = new Service.UsuarioService.UsuarioResponse();
+                }
+
+                response.UsuarioNome = usuario.Nome;
+                response.UsuarioFoto = usuario.Foto;
+
                 responseMany.Add(response);
             }
 
