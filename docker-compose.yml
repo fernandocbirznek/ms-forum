@@ -20,7 +20,7 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: site-fisica
     ports:
-      - "5432:5432"
+      - "5433:5433"
     networks:
       - app-network
 
