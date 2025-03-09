@@ -11,7 +11,7 @@ services:
     environment:
       - ConnectionStrings__DbContext=Host=postgres;Port=5432;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
     networks:
-      - app-network
+      - default
 
   postgres:
     image: postgres:latest
@@ -22,8 +22,9 @@ services:
     ports:
       - "5433:5433"
     networks:
-      - app-network
+      - default
 
 networks:
-  app-network:
-    driver: bridge
+  default:
+    name: rede-compartilhada
+    external: true
