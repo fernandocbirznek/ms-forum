@@ -34,10 +34,12 @@ services:
   ms-forum:
     build: .
     container_name: ms-forum
+    restart: always
     ports:
       - "5004:80"
     networks:
       - rede-compartilhada
+    entrypoint: ["/bin/sh", "-c", "until nc -z meu-postgres 5432; do echo Waiting for database; sleep 2; done; dotnet ms-forum.dll"]
 
 networks:
   rede-compartilhada:
