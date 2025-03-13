@@ -34,30 +34,12 @@ services:
   app:
     build: .
     ports:
-      - "8104:5004" # Porta para acessar o aplicativo no host
-    depends_on:
-      - postgres
+      - "8104:5004"
     environment:
-      - ConnectionStrings__DbContext=Host=postgres;Port=5432;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
+      - ConnectionStrings__DbContext=Host=ms-forum-postgres;Port=5432;Pooling=true;Database=site-fisica;User Id=postgres;Password=admin
     networks:
       - app-network
-
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: site-fisica
-    ports:
-      - "5432:5432"
-    networks:
-      - app-network
-    volumes:
-      - ms-forum-db-data:/var/lib/postgresql/data
 
 networks:
   app-network:
-    driver: bridge
-
-volumes:
-  ms-forum-db-data:
+    external: true  # Usa a mesma rede do ms-aula
